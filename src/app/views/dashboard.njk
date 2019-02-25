@@ -3,19 +3,30 @@
 {% block body %}
 <div class="content">
   <strong>Olá, {{user.name}}</strong>
-  <p>Inicie um agendamento escolhendo um profissional abaixo:</p>
-  <ul class="providers">
-    {% for provider in providers %}
-      <li class="provider">
-        <div>
-          <img src="/files/{{provider.avatar}}" alt="">
-          <strong>{{ provider.name }}</strong>
-        </div>
-        <a href="/app/appointments/new/{{provider.id}}">+</a>
-      </li>
-    {% endfor %}
-  </ul>
-
-  <a href="/app/logout" class="logout">Sair</a>
-</div>
+    {% if user.provider === false %}
+      <p>Inicie um agendamento escolhendo um profissional abaixo:</p>
+      <ul class="providers">
+        {% for provider in providers %}
+          <li class="provider">
+            <div>
+              <img src="/files/{{provider.avatar}}" alt="">
+              <strong>{{ provider.name }}</strong>
+            </div>
+            <a href="/app/appointments/new/{{provider.id}}">+</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+        <p>Veja abaixo a lista de agendamentos que você tem para hoje:</p>
+        <div id="schedule"></div>
+    {% endif %}
+    <a href="/app/logout" class="logout">Sair</a>
+  </div>
+  <script type="text/javascript">
+    fetch(`/app/schedule`).then(function(response) {
+      response.text().then(function (html){
+        document.getElementById('schedule').innerHTML = html
+      })
+    })
+  </script>
 {% endblock %}

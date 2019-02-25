@@ -2,6 +2,7 @@ const express = require('express')
 const session = require('express-session')
 const FileStore = require('session-file-store')(session)
 const nunjucks = require('nunjucks')
+const dateFilter = require('nunjucks-date-filter')
 const path = require('path')
 const flash = require('connect-flash')
 
@@ -30,11 +31,14 @@ class App {
     )
   }
   views () {
-    nunjucks.configure(path.resolve(__dirname, 'app', 'views'), {
-      watch: this.isDev,
-      express: this.express,
-      autoescape: true
-    })
+    nunjucks
+      .configure(path.resolve(__dirname, 'app', 'views'), {
+        watch: this.isDev,
+        express: this.express,
+        autoescape: true
+      })
+      .addFilter('date', dateFilter)
+
     this.express.use(express.static(path.resolve(__dirname, 'public')))
     this.express.set('view engine', 'njk')
   }
