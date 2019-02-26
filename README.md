@@ -1,3 +1,3 @@
 # Appointment System
 
-A simple Appointment System
+A simple Barbershop appointment aystem
